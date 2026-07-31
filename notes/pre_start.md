@@ -45,13 +45,19 @@ Basically:
 
 Observable:
 
-- API errors, Resource management and timeouts, Config issues.
+- API errors, Resource management and timeouts.
 
-I can measure these by looking at traces.
+I can measure these by looking at traces. I can also inject these and study their behaviour
+
+- Config issues and environment setup errors.
+
+These I can cite as relevant, I can also study their behaviour, but injecting them is not trivial.
 
 Unobservable:
 
 - Transient hardware faults and floating point non-determinism from system configuration.
+
+These I can cite as relevant.
 
 Next step is to read BurstGPT and look into the traces.
 
