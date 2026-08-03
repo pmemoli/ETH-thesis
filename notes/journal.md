@@ -32,4 +32,7 @@ I may do something different for 4. based on what I find.
 
 We'll use CloudLAB to run the environment since we need KVM access, and swissai serving api to run the models, at least temporarily. I'm not sure if we'll be able to inject certain types of noise with it, such as resource budget constraints. 
 
-Too jet lagged to finish setting up the CloudLab environment, so I finished the day by reading on [swe-bench](https://arxiv.org/pdf/2310.06770).
+Too jet lagged to finish setting up the CloudLab environment, so I finished the day by reading on [swe-bench](https://arxiv.org/pdf/2310.06770). The benchmark is (originally) basically a bunch of merged PRs (2294) that installs succesfully and contains new previously failing tests that solve after the merge. They use an extremly simple harness which includes relevant files with bm25, or just pass them with an oracle based on modified files. There is also no mention of tool use of any form. Results in the paper are super bad, but this is mostly attributable to the 2023 models they evaluate and the retrieval-based context.
+
+I should look into the verified version, and see what harness it uses in 2026. Found [this paper](https://arxiv.org/pdf/2405.15793) which introduces the v1 harness... I want to look more documentation. 
+
