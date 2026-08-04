@@ -36,3 +36,6 @@ Too jet lagged to finish setting up the CloudLab environment, so I finished the 
 
 I should look into the verified version, and see what harness it uses in 2026. Found [this paper](https://arxiv.org/pdf/2405.15793) which introduces the v1 harness... I want to look more documentation. 
 
+## August 4, 2026
+
+Created the cloudlab profile in `profile.py` with [this documentation](https://docs.cloudlab.us/geni-lib.html). I just used the hardware config and image from Xiao's `agent-env-baseline` profile. Hardware types are documented [here](https://docs.cloudlab.us/hardware.html). 
