@@ -38,4 +38,5 @@ I should look into the verified version, and see what harness it uses in 2026. F
 
 ## August 4, 2026
 
-Created the cloudlab profile in `profile.py` with [this documentation](https://docs.cloudlab.us/geni-lib.html). I just used the hardware config and image from Xiao's `agent-env-baseline` profile. Hardware types are documented [here](https://docs.cloudlab.us/hardware.html). 
+Created the cloudlab profile in `profile.py` with [this documentation](https://docs.cloudlab.us/geni-lib.html). I just let the hardware be whatever node is available, and set the image to Ubuntu 24, same as Xiao's `agent-env-baseline` profile. Hardware types are documented [here](https://docs.cloudlab.us/hardware.html), I may need them eventually since they should be an upper bound for agent-env resources. 
+

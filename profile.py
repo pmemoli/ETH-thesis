@@ -15,5 +15,7 @@ request = portal.context.makeRequestRSpec()
 node = request.RawPC("node")
 node.disk_image = DEFAULT_IMAGE
 
+#
+
 # Write the request in RSpec format
 portal.context.printRequestRSpec()
