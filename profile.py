@@ -15,7 +15,12 @@ request = portal.context.makeRequestRSpec()
 node = request.RawPC("node")
 node.disk_image = DEFAULT_IMAGE
 
-#
+# node.hardware_type = "..."
+
+# Install dependencies
+node.addService(
+    rspec.Execute(shell="bash", command="/local/repository/profile.sh")
+)
 
 # Write the request in RSpec format
 portal.context.printRequestRSpec()

@@ -1,24 +1,26 @@
 include .env
 export
 
+# mutagen commands
 mut-create:
-	mutagen sync create -m two-way-safe --ignore=.venv --ignore=.git \
-		--name=eth-${USER} \
-		. ${USER}@sgs-gpu05.ethz.ch:/pub/scratch/${USER}
+	mutagen sync create -m one-way-safe --ignore=.venv --ignore=.git --ignore=./data \
+		--name=eth-thesis \
+		. ${SSH_URL}:/users/pmemoli/thesis/
 
 mut-resume:
-	mutagen sync resume eth-${USER}
+	mutagen sync resume eth-thesis
 
 mut-kill:
-	mutagen sync terminate eth-${USER}
+	mutagen sync terminate eth-thesis
 
 mut-list:
 	mutagen sync list
 
-ssh:
-	ssh ${USER}@${DOMAIN_NAME}
+# load data from runs
+download-data:
+	rsync -avz --ignore-existing ${SSH_URL}:/users/pmemoli/thesis/data/runs/ ./data/runs/
 
 run:
 
 
-.PHONY: mut-sync
+.PHONY: mut-create mut-resume mut-kill mut-list run

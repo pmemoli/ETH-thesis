@@ -5,5 +5,8 @@ description = "pmemoli master thesis under ETH"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "e2b>=2.37.0",
     "geni-lib>=0.9.9.4",
+    "mini-swe-agent>=2.4.6",
+    "pydantic>=2.13.4",
 ]

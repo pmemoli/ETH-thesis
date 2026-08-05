@@ -21,3 +21,13 @@ It works over a rest API over a unix socket, providing an openAPI documentation.
 OS level virtualization or Containerization is the use of the native OS interface to run applications in separate userspaces (named containers), thereby virtualizing the entire OS for the application. 
 
 The most common technology for implementing containers is Docker, where the templates are defined docker images.
+
+## AgentENV
+
+[AgentENV](https://github.com/kvcache-ai/AgentENV) is the self-hosted sandbox runtime we'll use for the AI agents. It runs firecracker microVMs and exposes an E2B-compatible HTTP API which is what the harnesses will use to interact with the VMs. 
+
+There are 3 ways of interacting with the aenv process, through the aenv CLI, and the E2B-compatible HTTP API. Since there is an e2b sdk, we can just spawn stuff within it programatically.
+
+## E2B
+
+[E2B](https://github.com/e2b-dev/e2b) is an infrastructure that allows for running AI-generated code in a sanboxed environment in the cloud. The sandbox is interfaced through a REST API, and it provides an official SDK that can interact with any E2B compatible endpoint.

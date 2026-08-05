@@ -1,21 +1,46 @@
 # Journal
 
-## July 31, 2026
+The journal contains what I did and thought for each day. Learning and reference markdowns can be found in `notes/learning/`. 
 
-Today I'm formally starting my master thesis. Pre-start notes are found in `notes/pre_start.md`. 
+## August 5, 2026
 
-The main goal right now is connecting to ETH's computers, creating scripts to sync easily and setting up a minimal agent environment. As discussed with Cedric and Xiao, this environment will be Kimi 3's [Agent ENV](https://github.com/kvcache-ai/AgentENV). In parallel, I would like to read on the technical aspects of Firecracker's VMs, and Kimi 3.
+Decided on using [swe-agent-mini](https://github.com/swe-agent/mini-swe-agent) as the swe-bench harness since that is realistic, and Xiao already saw some variance running some samples with it. I do worry a bit that it is not representative of the variance in proper harnesses like claude-code, since it doesn't have websearch capabilities unless the agent chooses to use curl. 
 
-I succesfully connected to the destination ${USER}@${DOMAIN_NAME} and synced it with mutagen to my local machine.
+It's not priority at all but I'm also kinda curious on formalizing the agents and the variance sources with Markov Decision Processes, I found [this book](https://www.amazon.com/dp/1489974903) about it which I will absolutely read in the following months.
 
-I've also read upon hypervisors and the KVM through:
+My goal for today is setting up the harness and running at least some [swe-bench-verified](https://openai.com/index/introducing-swe-bench-verified/) samples within it. The verified version filters underspecified PRs, those that introduce unit tests that filter valid solutions and others with severe issues. They end up with 500 samples.
 
-- [Hypervisor](https://en.wikipedia.org/wiki/Hypervisor)
-- [KVM](https://northflank.com/blog/what-is-kvm)
+For this I first need to:
 
-And a bunch of other resources. Super interesting.
+1. Understand how to interface with the AgentENV MicroVMs
+2. Understand mini-swe-agent
 
-On monday I'm going to finish reading on Firecracker and KVM. After that I want to setup a Firecracker instance and then some 4B model running its context on Agent ENV.
+### 1)
+
+The key thing with AgentENV is that it exposes an E2B compatible API through a port, so I just have to start the server and use an E2B sdk to abstract the booting of VMs. The sdk also lets me specify the env (virtual) resources.
+
+### 2)
+
+mini-swe-agent is a very simple harness to interact with LLMs, while providing scripts to run swe-bench on it. It is organized into three modules, each corresponding to a prototype class that can be hacked to whatever: "agents", "environment" and "models". 
+
+The agent is the proper harness, which I will leave untouched. What I do need to change is the environment class, which needs to connect to agentENV microVMs through the e2b sdk, and the model class which should use the [swissai serving api](https://serving.swissai.svc.cscs.ch). I'll probably have to tweak these two similar modules on other harnesses as well.
+
+
+
+## August 4, 2026
+
+Created the cloudlab profile in `profile.py` with [this documentation](https://docs.cloudlab.us/geni-lib.html). I just let the node be whatever is available, and set the image to Ubuntu 24, same as Xiao's `agent-env-baseline` profile. Hardware types are documented [here](https://docs.cloudlab.us/hardware.html), I may need them eventually since they should be an upper bound for agent-env resources. 
+
+Succesfully setup the environment and created the make commands to sync the local-remote folders with mutagen, and to download the runs with rsync. Tested it and everything is working smoothly. I was also able to download agent-env and run a CLI on a microVM on the node.
+
+Before wiring agentenv with swe-bench and running everything, I want to:
+
+1. Understand what harness is most widely used for running [swe-bench](https://arxiv.org/pdf/2310.06770), since what the paper proposes is definitely legacy and not used.
+2. Understand how microVMs are interfaced with.
+
+(written August 5, but this was done on August 4) Read the [swe-agent](https://arxiv.org/abs/2405.15793) paper (early 2024), which was written by the same authors as swe-bench. The paper introduces one of the first non-trivial harnesses for LM-agents. I also skimmed [ReAct](https://arxiv.org/abs/2210.03629) (2023) which in a way motivates the harness, but its a very simple idea (reason before acting betters performance) so I don't think there is much value in it. 
+
+Nevertheless, as models became better, the abstracted interface which distinguished the original swe-agent harness became useless, so the authors just recommend using [swe-agent-mini](https://github.com/swe-agent/mini-swe-agent) which has the model iterate a simple reason-actwithshell-readoutput loop. 
 
 ## August 3, 2026
 
@@ -36,7 +61,19 @@ Too jet lagged to finish setting up the CloudLab environment, so I finished the 
 
 I should look into the verified version, and see what harness it uses in 2026. Found [this paper](https://arxiv.org/pdf/2405.15793) which introduces the v1 harness... I want to look more documentation. 
 
-## August 4, 2026
+## July 31, 2026
 
-Created the cloudlab profile in `profile.py` with [this documentation](https://docs.cloudlab.us/geni-lib.html). I just let the hardware be whatever node is available, and set the image to Ubuntu 24, same as Xiao's `agent-env-baseline` profile. Hardware types are documented [here](https://docs.cloudlab.us/hardware.html), I may need them eventually since they should be an upper bound for agent-env resources. 
+Today I'm formally starting my master thesis. Pre-start notes are found in `notes/pre_start.md`. 
 
+The main goal right now is connecting to ETH's computers, creating scripts to sync easily and setting up a minimal agent environment. As discussed with Cedric and Xiao, this environment will be Kimi 3's [Agent ENV](https://github.com/kvcache-ai/AgentENV). In parallel, I would like to read on the technical aspects of Firecracker's VMs, and Kimi 3.
+
+I succesfully connected to the destination ${USER}@${DOMAIN_NAME} and synced it with mutagen to my local machine.
+
+I've also read upon hypervisors and the KVM through:
+
+- [Hypervisor](https://en.wikipedia.org/wiki/Hypervisor)
+- [KVM](https://northflank.com/blog/what-is-kvm)
+
+And a bunch of other resources. Super interesting.
+
+On monday I'm going to finish reading on Firecracker and KVM. After that I want to setup a Firecracker instance and then some 4B model running its context on Agent ENV.
