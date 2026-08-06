@@ -9,4 +9,5 @@ dependencies = [
     "geni-lib>=0.9.9.4",
     "mini-swe-agent>=2.4.6",
     "pydantic>=2.13.4",
+    "swebench>=4.1.0",
 ]

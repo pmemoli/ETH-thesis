@@ -8,6 +8,10 @@ source $HOME/.local/bin/env
 curl -fsSL https://raw.githubusercontent.com/kvcache-ai/AgentENV/main/scripts/install.sh | sudo bash
 sudo systemctl start aenv
 
+# installs docker
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker "$(id -un)"
+sudo systemctl enable --now docker
+
 # creates thesis folders (the rest is synced with mutagen)
-mkdir $HOME/thesis
-mkdir $HOME/thesis/data/runs
+mkdir -p $HOME/thesis/data/runs

@@ -1,6 +1,14 @@
 # Journal
 
-The journal contains what I did and thought for each day. Learning and reference markdowns can be found in `notes/learning/`. 
+The journal contains what I did and thought for each day. Markdowns that accompany tools and papers are found in `notes/learning/`.
+
+## August 6, 2026
+
+I was able to run a sample of swe-bench-verified on the mini-swe-agent harness using the cloudlab infra, the swissai serving api and the agentENV microVMs, only issue is that its taking SO much time and the traces don't have the infromation I mostly care about. Wiring everything up with minisweagent is also being such a pain, we are basically rewriting 2/3 of the codebase which mostly works with yaml configs. It will also be a pain to run other benchmarks, configurations and harnesses this way...
+
+Right now I JUST want to analyze a bunch of traces from swebench runs on our infra... The environment can easily be integrated through e2b and the serving api is OpenAI-compatible. Looking at the [original anthropic post](https://www.anthropic.com/engineering/infrastructure-noise) which inspired the thesis proposal, they evaluate on [terminal bench 2.0](https://arxiv.org/pdf/2601.11868) which comes with a [harbor framework](https://www.harborframework.com/) to evaluate agents in sandboxed environments, and we can wire everything up without issue. Read the terminal bench paper and the harbor docs, and it seems like a much better approach than hacking mini-swe-agent. I will try to wire up harbor with agentENV and the serving api, and run swe-bench-verified on it (hopefully by tomorrow I have some traces). Kinda lost 1 1/2 days forking mini-swe-agent, pity, but i guess I learned a lot.
+
+Tomorrow I'm running a bunch of traces on harbor and our infra, it should be super easy. The difficulty will be injecting stuff but on a reverse proxy I should be able to cook something.
 
 ## August 5, 2026
 
@@ -24,8 +32,6 @@ The key thing with AgentENV is that it exposes an E2B compatible API through a p
 mini-swe-agent is a very simple harness to interact with LLMs, while providing scripts to run swe-bench on it. It is organized into three modules, each corresponding to a prototype class that can be hacked to whatever: "agents", "environment" and "models". 
 
 The agent is the proper harness, which I will leave untouched. What I do need to change is the environment class, which needs to connect to agentENV microVMs through the e2b sdk, and the model class which should use the [swissai serving api](https://serving.swissai.svc.cscs.ch). I'll probably have to tweak these two similar modules on other harnesses as well.
-
-
 
 ## August 4, 2026
 
