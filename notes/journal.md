@@ -10,6 +10,10 @@ Right now I JUST want to analyze a bunch of traces from swebench runs on our inf
 
 Tomorrow I'm running a bunch of traces on harbor and our infra, it should be super easy. The difficulty will be injecting stuff but on a reverse proxy I should be able to cook something.
 
+ Already setup the makefile target to run swe-bench and ran a sample with it, alles gut. I ran it with Apertus 70B and it was really fast, all thats left now is to run many samples and analyze the variability and traces. To reduce the variance from the model outputs, maybe I can fix a seed... 
+
+ Also, I used the terminus-2 harness (very similar to swe-agent-mini) and noticed it runs tools. The papers I've read are previous to the massive incorporation and post training of tool use in LLMs, so I think I'll read the key tool related papers while the benchmark runs. 
+
 ## August 5, 2026
 
 Decided on using [swe-agent-mini](https://github.com/swe-agent/mini-swe-agent) as the swe-bench harness since that is realistic, and Xiao already saw some variance running some samples with it. I do worry a bit that it is not representative of the variance in proper harnesses like claude-code, since it doesn't have websearch capabilities unless the agent chooses to use curl. 
