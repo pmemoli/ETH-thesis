@@ -1,0 +1,30 @@
+job_name: env_variability_smoke_test
+jobs_dir: data/runs
+
+n_attempts: 10
+n_concurrent_trials: 8
+
+datasets:
+  - name: swebench-verified
+    version: "1.0"
+    n_tasks: 1
+
+agents:
+  - name: mini-swe-agent
+    model_name: openai/SwissAI-Research/swiss-ai/Apertus-v1.5-8B
+    env:
+      OPENAI_BASE_URL: https://api.swissai.svc.cscs.ch/v1
+    kwargs:
+      config:
+        model:
+          model_kwargs:
+            temperature: 0
+
+environment:
+  type: e2b
+
+verifier:
+  max_timeout_sec: 900
+
+retry:
+  max_retries: 0

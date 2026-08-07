@@ -2,6 +2,45 @@
 
 The journal contains what I did and thought for each day. Markdowns that accompany tools and papers are found in `notes/learning/`.
 
+## August 7, 2026
+
+Last day of the week! Checked to make sure the curl is available on the microVMs, and agentENV sets it up by default, epic. 
+
+The goal for today is to run swe-bench-verified on the mini-swe-agent harness using harbor, and maybe build (as in, vibecode) some streamlit UI to just look at the traces. I must also think of next steps for next week and what to say in the presentation.
+
+What I want to do right now and for the next week is to quantify how much variance can be attributed to the environment rather than general LLM non-determinism, and what are the *observable* variance sources from our fixed-budget traces. To isolate this, I'm thinking of running 30 samples of swe-bench-verified on some harness 10 times each for 2 LLMs (a big and small one, so 600 runs) with temperature 0, so that way the variability is attributable to the environment (i mean, mostly, non-associativity from floating point operations inevitably makes generation non-deterministic). 
+
+Looking at the [swe-bench](https://www.swebench.com/verified.html) docs, they specify that the version 2.x.x leaderboards don't set any temperature (do they use model defaults?), and there is no mention anywhere of multiple runs, so there is no CI control over the variability from BOTH the LLM and the environment. Terminal-bench official leaderboards also uses the model defaults, but at least they run each (harness, benchmark, model) triplet >= 5 times. In either case, variance from the environment is not controlled for.
+
+For a smoke test, I ran swe-bench-verified on 2 samples 10 times on the mini-swe-agent harness using harbor and agentENV, on [Apertus](https://arxiv.org/pdf/2509.14233) 8B and 70B (job is specified at `src/harbor_jobs/env_variability_smoke_test.yaml`). I didn't set any timeouts or max-turns for simplicity.
+
+### Summary of the work done on the week
+
+- Connected to the CloudLab infra and wrote some scripts to sync the local directory with mutagen, alles gut.
+
+- Read on firecracker, the KVM, hypervisors and how the VMs are interfaced with an API through a port. Also found out they can be easily interacted with, since AgentENV provides an E2B-compatible API which has a bunch of sdks.
+
+- Read the swe-bench, swe-agent and the terminal-bench papers (among others, but they aren't relevant) to get a proper feel for what harnesses are used in the leaderboards, what these are, and how they are ran. Noticed quite a lot of issues with the way the leaderboards are presented. There are just a few runs per sample, which makes it really hard to say which model is best. 
+
+- Spent like 2 days forking and modifying mini-swe-agent to use our AgentENV vms through a custom Environment adapter. I ran one sample but it was very buggy and realized it wasn't worth the effort. Found by reading the terminal-bench paper that there is a framework specifically made for this (harbor), that can be set up with a custom E2B environment for tool execution, rather than docker which is what most frameworks use.
+
+- Ran a 10 sample smoke test to ensure stuff is working correctly.
+
+So I basically read a minimal subset of literature, found some issues, connected to the infra, and ran a smoke test on Apertus 8B. 
+
+### For the next week
+
+1. Analyze traces left generating over the weekend. The goal is to understand the variability attributable to the environment in a specific configuration, and **if existing**, to track down the sources of **observable** variability and generate a taxonomy. I'll probably make a UI with streamlit to look at the traces.
+
+2. Pick a **single** probe based on the results, and inject noise, exploring how metrics (pass rate, token consumption, turns, etc.) increase/decrease.
+
+Based on that I will have a good justification and motivation on the presence of environment noise (1.), and why its worthwhile to study it (2.).
+
+I'm most interested rn in tackling **RQ1: What are the infra noise sources in agentic systems**, by reading literature and doing a larger scale experiment. There is a lot of literature relating to the problem of agentic tools failing. A really cool paper I found before arriving is TRAIL, which provides traces for agentic runs and a taxonomy of errors. I'd be curious on reading it and properly looking at the traces, with the main objective of defining a taxonomy of errors that I can then:
+
+1. study how they distribute in a larger experiment.
+2. inject different noise sources.
+
 ## August 6, 2026
 
 I was able to run a sample of swe-bench-verified on the mini-swe-agent harness using the cloudlab infra, the swissai serving api and the agentENV microVMs, only issue is that its taking SO much time and the traces don't have the infromation I mostly care about. Wiring everything up with minisweagent is also being such a pain, we are basically rewriting 2/3 of the codebase which mostly works with yaml configs. It will also be a pain to run other benchmarks, configurations and harnesses this way...

@@ -4,6 +4,9 @@
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source $HOME/.local/bin/env
 
+# installs harbor
+uv tool install harbor['e2b']
+
 # installs agentenv and starts server
 curl -fsSL https://raw.githubusercontent.com/kvcache-ai/AgentENV/main/scripts/install.sh | sudo bash
 sudo systemctl start aenv
